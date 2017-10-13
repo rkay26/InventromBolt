@@ -90,6 +90,6 @@ if __name__ == '__main__':
         # If captcha matches the captcha text then print information in JSON format
         if booked_on is not None:
             jsonFormat(tracking_id, booked_on.text, status.text[18:], delivered_on.text)
-            jsonFormat('EP470107781IN', '10/10/2017', 'Item delivered [To: ADDRESSEE ]', '12/10/2017')
+            
             break
         
