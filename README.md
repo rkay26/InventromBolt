@@ -37,6 +37,4 @@ Steps:
        
        3.BeautifulSoup does the task of entering the input and fetching the output.
        
-       4.Browser closes.
-       
-       5.Prints the JSON in the terminal as desired.
+       4.Prints the JSON in the terminal as desired.
