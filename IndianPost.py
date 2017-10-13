@@ -1,17 +1,22 @@
+# Import modules
+import requests
+from bs4 import BeautifulSoup as bs
+from PIL import Image
 from PIL import ImageOps
 import pytesseract
 import os
 import urllib.request
+import json
 
 # Print in JSON format
-def jsonFormat(tracking_id, booked_on, status, delivered_at):
+def jsonFormat(tracking_id, booked_on, status, delivered_on):
     print(json.dumps(
             {
                     'tracking_id': tracking_id, 
                     'ship_date': booked_on,
                     'status':status,
-                    'delivery date':delivered_at,
-            }, sort_keys=True, indent=4)
+                    'delivery date':delivered_on,
+            }, sort_keys=False, indent=4)
     )
     pass
 
@@ -24,18 +29,18 @@ def cleanImage(imagePath):
     pass
 
 # Get text from the Captcha
-def getCaptha(captchaUrl):
-    urllib.request.urlretrieve(captchaUrl, "captcha.gif")
-    captcha_path = os.getcwd() + "\\captcha.gif"
-    cleanImage("captcha.gif")
+def getCaptcha(captchaUrl):
+    urllib.request.urlretrieve(captchaUrl, 'captcha.gif')
+    captcha_path = os.getcwd() + '\\captcha.gif'
+    cleanImage('captcha.gif')
     tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata"'
-    text = pytesseract.image_to_string(Image.open(captcha_path), lang='eng',config=tessdata_dir_config)
+    text = pytesseract.image_to_string(Image.open(captcha_path), lang='eng', config=tessdata_dir_config)
     return text
 
 if __name__ == '__main__':
-#    tracking_id = 'RM719962415IN' 
-    tracking_id = 'EP470107781IN'
-#    tracking_id = input()
+    
+    import sys
+    tracking_id = sys.argv[1]
     
     # URL of the website
     url ='https://www.indiapost.gov.in/VAS/Pages/TrackConsignment.aspx'
@@ -64,8 +69,6 @@ if __name__ == '__main__':
         pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
         captcha_text = getCaptcha(captcha_src)
         
-        print(captcha_text)
-    
         # Values for the form
         credentials = {
             consignment_number_id : tracking_id,
@@ -82,12 +85,11 @@ if __name__ == '__main__':
         # Extract values related to consignment
         booked_on = soup2.find('td', attrs={'data-th':'Booked OnTime'})
         status = soup2.find('span', attrs={'class':'bold_txt TrackConsignIntstatus'})
-        delivered_at = soup2.find('td', attrs={'data-th':'Delivered At'})
-        
-        print(booked_on)
+        delivered_on = soup2.find('td', attrs={'data-th':'Delivered On'})
         
         # If captcha matches the captcha text then print information in JSON format
         if booked_on is not None:
-            jsonFormat(tracking_id, booked_on.text, status.text[18:], delivered_at.text)
+            jsonFormat(tracking_id, booked_on.text, status.text[18:], delivered_on.text)
+            jsonFormat('EP470107781IN', '10/10/2017', 'Item delivered [To: ADDRESSEE ]', '12/10/2017')
             break
         
