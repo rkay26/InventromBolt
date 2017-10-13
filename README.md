@@ -31,10 +31,8 @@ Steps:
        
  Working:
        
-       1Input Consignment Number in the terminal.
+       1.Input Consignment Number in the terminal.
+   
+       2.BeautifulSoup does the task of entering the input and fetching the output.
        
-       2.Opens Firefox Browser.
-       
-       3.BeautifulSoup does the task of entering the input and fetching the output.
-       
-       4.Prints the JSON in the terminal as desired.
+       3.Prints the JSON in the terminal as desired.
